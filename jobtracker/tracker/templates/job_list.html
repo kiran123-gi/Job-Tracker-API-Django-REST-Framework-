@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Tracker</title>
+    <style>
+
+        body { font-family: Arial; 
+            
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ccc; }
+        .btn { padding: 5px 10px; text-decoration: none; }
+        .Applied { color: orange; }
+        .Interview { color: blue; }
+        .Rejected { color: red; }
+        .Offer { color: green; font-weight: bold; }
+    </style>
+</head>
+<body > 
+<h3>Total: {{ total }}</h3>
+<h3>Interviews: {{ interviews }}</h3>
+<h3>Offers: {{ offers }}</h3>
+<h2>Job Applications</h2>
+<form method="GET">
+    <select name="status">
+        <option value="">All</option>
+        <option value="Applied">Applied</option>
+        <option value="Interview">Interview</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Offer">Offer</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<br>
+
+<a href="{% url 'add_job' %}">Add Job</a>
+
+<table>
+    <tr>
+        <th>Company</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Actions</th>
+        <th>Resume</th>
+    </tr>
+
+    {% for job in jobs %}
+    <tr>
+        <td>{{ job.company_name }}</td>
+        <td>{{ job.role }}</td>
+        <td>
+             <span class="badge {{ job.status }}">
+        {{ job.status }}
+            </span>
+        </td>
+        <td>
+            <a href="{% url 'update_job' job.id %}">Edit</a>
+            <a href="{% url 'delete_job' job.id %}" 
+            onclick="return confirm('Are you sure?')">
+            Delete</a>
+        </td>
+        <td>
+    {% if job.resume %}
+        <a href="{{ job.resume.url }}" target="_blank">View Resume</a>
+    {% else %}
+        No File
+    {% endif %}
+</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
